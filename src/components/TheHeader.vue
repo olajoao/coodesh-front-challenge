@@ -6,6 +6,7 @@
           class="w-full object-contain"
           src="https://picsum.photos/200"
           alt="Company Logo Image"
+          loading="lazy"
         />
         <span class="sr-only">
           Company logo image. Click to go to home page.

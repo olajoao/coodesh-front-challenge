@@ -17,7 +17,7 @@
         />
       </div>
 
-      <PacientTable />
+      <PacientTable :pacientsData="pacients" />
 
       <div class="text-center my-5">
         <button>+ Load More</button>
@@ -27,8 +27,19 @@
 </template>
 
 <script setup>
+import { ref } from "@vue/reactivity";
 import { DocumentSearchIcon } from "@heroicons/vue/outline";
 import PacientTable from "./PacientTable.vue";
+import usePacientStore from "../../../store/PacientStore.js";
+
+const PacientStore = usePacientStore();
+
+let pacients = ref([]);
+
+PacientStore.getPacients().then((response) => {
+  PacientStore.pacients = response.data.results;
+  pacients.value = PacientStore.pacients;
+});
 </script>
 
 <style>
