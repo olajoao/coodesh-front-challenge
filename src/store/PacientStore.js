@@ -7,7 +7,7 @@ const usePacientStore = defineStore("usePacientStore", {
   },
   actions: {
     async getPacients() {
-      return request.get("?results=50");
+      return request.get("?page=10&results=101");
     },
   },
 });

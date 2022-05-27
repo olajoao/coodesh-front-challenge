@@ -17,7 +17,17 @@
         />
       </div>
 
-      <PacientTable :pacientsData="pacients" />
+      <Pagination
+        v-if="pacients.length > 0"
+        :totalRecords="pacients.length"
+        :perPageOptions="perPageOptions"
+        @changePage="setPagination"
+      />
+
+      <PacientTable
+        :pacientsData="computedPacients"
+        :headConfig="tableConfig"
+      />
 
       <div class="text-center my-5">
         <button>+ Load More</button>
@@ -31,14 +41,53 @@ import { ref } from "@vue/reactivity";
 import { DocumentSearchIcon } from "@heroicons/vue/outline";
 import PacientTable from "./PacientTable.vue";
 import usePacientStore from "../../../store/PacientStore.js";
+import Pagination from "./Pagination.vue";
+import { computed } from "@vue/runtime-core";
 
 const PacientStore = usePacientStore();
 
 let pacients = ref([]);
+let perPageOptions = ["20", "50", "100"];
+let pagination = ref({
+  page: 1,
+  perPage: perPageOptions[0],
+});
 
-PacientStore.getPacients().then((response) => {
-  PacientStore.pacients = response.data.results;
+function setPagination(obj) {
+  pagination.value = obj;
+}
+
+const tableConfig = [
+  {
+    key: "name",
+    title: "name",
+  },
+  {
+    key: "gender",
+    title: "Gender",
+  },
+  {
+    key: "birth",
+    title: "Birth",
+  },
+  {
+    key: "action",
+    title: "Action",
+  },
+];
+
+PacientStore.getPacients().then(({ data }) => {
+  PacientStore.pacients = data.results;
   pacients.value = PacientStore.pacients;
+});
+
+const computedPacients = computed(() => {
+  if (!pacients) return [];
+
+  const fisrtIndex = (pagination.value.page - 1) * pagination.value.perPage;
+  const lastIndex = pagination.value.page * pagination.value.perPage;
+
+  return pacients.value.slice(fisrtIndex, lastIndex);
 });
 </script>
 
