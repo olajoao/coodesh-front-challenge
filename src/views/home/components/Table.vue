@@ -25,6 +25,7 @@
           <td>{{ new Date(pacient.dob.date).toLocaleDateString() }}</td>
           <td class="text-center py-2">
             <button
+            @click="showPacientInfo(pacient)"
               class="px-5 bg-slate-800 text-slate-50 rounded-md shadow shadow-slate-600"
             >
               View
@@ -34,9 +35,15 @@
       </tbody>
     </table>
   </div>
+  <Transition name="infos">
+    <PacientInfoModal v-if="isOpen" :pacientInfo="pacientInfo" :closeModal="closeModal" />
+  </Transition>
 </template>
 
 <script setup>
+import { ref } from '@vue/reactivity';
+import PacientInfoModal from './PacientInfoModal.vue';
+
 const props = defineProps({
   pacientsData: {
     type: Array,
@@ -47,4 +54,17 @@ const props = defineProps({
     default: [],
   },
 });
+
+let pacientInfo = ref({})
+let isOpen = ref(false)
+
+function showPacientInfo(pacient) {
+  console.log(pacient)
+  isOpen.value = true
+  pacientInfo.value = pacient
+}
+
+function closeModal() {
+  isOpen.value = false
+}
 </script>
