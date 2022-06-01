@@ -1,7 +1,7 @@
 <template>
   <main class="bg-slate-800">
-    <section class="container max-w-3xl mx-auto pt-8 2xl:pt-16">
-      <h1 class="text-zinc-200 text-xl leading-7">
+    <section class="container max-w-3xl mx-auto pt-5 px-5 lg:pt-8 2xl:pt-16">
+      <h1 class="text-zinc-200 text-lg lg:text-xl leading-7">
         Find all data you need to be part of the team.
       </h1>
 
@@ -14,7 +14,7 @@
           @input="searchPatient"
         />
         <DocumentSearchIcon
-          class="absolute top-2.5 right-2 w-5 h-5 text-slate-400"
+          class="absolute top-2.5 right-2 w-5 h-5 text-slate-400 lg"
         />
       </div>
 
@@ -112,7 +112,13 @@ watch(fakePatientsList, () => {
 
 <style>
 main {
-  height: calc(100vh - 72px);
+  height: calc(100vh - 56px);
+}
+
+@media (min-width: 1024px) {
+  main {
+    height: calc(100vh - 72px);
+  } 
 }
 
 .infos-enter-active,
