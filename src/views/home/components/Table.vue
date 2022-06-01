@@ -59,7 +59,6 @@ let pacientInfo = ref({})
 let isOpen = ref(false)
 
 function showPacientInfo(pacient) {
-  console.log(pacient)
   isOpen.value = true
   pacientInfo.value = pacient
 }
@@ -68,3 +67,16 @@ function closeModal() {
   isOpen.value = false
 }
 </script>
+
+<style>
+/* we will explain what these classes do next! */
+.infos-enter-active,
+.infos-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.infos-enter-from,
+.infos-leave-to {
+  opacity: 0;
+}
+</style>
