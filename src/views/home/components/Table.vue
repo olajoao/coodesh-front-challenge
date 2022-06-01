@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow shadow-slate-300 max-h-[50vh] overflow-y-auto relative">
+  <div class="shadow shadow-slate-300 max-h-[50vh] overflow-y-auto relative side__infos">
     <table class="w-full">
       <thead class="relative">
         <tr
@@ -25,8 +25,8 @@
           <td>{{ new Date(pacient.dob.date).toLocaleDateString() }}</td>
           <td class="text-center py-2">
             <button
-            @click="showPacientInfo(pacient)"
-              class="px-5 bg-slate-800 text-slate-50 rounded-md shadow shadow-slate-600"
+            @click="showPacientInfo(pacient, index)"
+            class="px-5 bg-slate-800 text-slate-50 rounded-md shadow shadow-slate-600"
             >
               View
             </button>
@@ -35,14 +35,13 @@
       </tbody>
     </table>
   </div>
-  <Transition name="infos">
-    <PacientInfoModal v-if="isOpen" :pacientInfo="pacientInfo" :closeModal="closeModal" />
-  </Transition>
+  
 </template>
 
 <script setup>
 import { ref } from '@vue/reactivity';
-import PacientInfoModal from './PacientInfoModal.vue';
+
+const emit = defineEmits(['getPacient'])
 
 const props = defineProps({
   pacientsData: {
@@ -55,28 +54,7 @@ const props = defineProps({
   },
 });
 
-let pacientInfo = ref({})
-let isOpen = ref(false)
-
-function showPacientInfo(pacient) {
-  isOpen.value = true
-  pacientInfo.value = pacient
-}
-
-function closeModal() {
-  isOpen.value = false
+function showPacientInfo(pacient, index) {
+  emit('getPacient', {pacient, index})
 }
 </script>
-
-<style>
-/* we will explain what these classes do next! */
-.infos-enter-active,
-.infos-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.infos-enter-from,
-.infos-leave-to {
-  opacity: 0;
-}
-</style>

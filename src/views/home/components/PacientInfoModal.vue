@@ -45,6 +45,16 @@
           <span class="text-xs uppercase font-bold text-slate-500">Address</span>  
           <p class="text-sm">{{ `${pacientInfo.location.street.name}, ${pacientInfo.location.street.number} - ${pacientInfo.location.city} ${pacientInfo.location.state}` }}</p>
         </div>
+        <div class="text-xs mt-5">
+          <span class="text-xs uppercase font-bold text-slate-500">Profile Link</span>  
+          <a class="flex text-sm gap-3 items-center" :href="`http://localhost:3000/pacient/1`">
+            {{ `http://localhost:3000/pacient/1` }}
+            
+          </a>
+        </div>
+        <div>
+          
+        </div>
       </div>
     </div>
   </section>
@@ -62,4 +72,7 @@ const props = defineProps({
     default: Function
   }
 })
+
+console.log(props.pacientInfo)
+
 </script>

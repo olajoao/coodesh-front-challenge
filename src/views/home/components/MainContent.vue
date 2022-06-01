@@ -19,7 +19,11 @@
         />
       </div>
 
-      <PacientTable :pacientsData="fakePacients" :headConfig="tableConfig" />
+      <PacientTable :pacientsData="fakePacients" :headConfig="tableConfig" @getPacient="handlePacientInfos" />
+
+      <Transition name="infos">
+        <PacientInfoModal v-if="isOpen" :pacientInfo="pacientInfo" :closeModal="closeModal" />
+      </Transition>
 
       <LoadMoreButton :loading="requestStatus" @click="loadMorePacients" />
     </section>
@@ -27,24 +31,33 @@
 </template>
 
 <script setup>
+import { computed, onMounted, reactive, ref, watch, watchEffect } from '@vue/runtime-core';
 import { DocumentSearchIcon } from '@heroicons/vue/outline';
 import PacientTable from './Table.vue';
 import usePacientStore from '../../../store/PacientStore.js';
-import { computed, reactive, ref, watchEffect } from '@vue/runtime-core';
 import LoadMoreButton from './LoadMoreButton.vue';
+import PacientInfoModal from './PacientInfoModal.vue';
+import { useRoute } from 'vue-router';
 
 const PacientStore = usePacientStore();
+const route = useRoute();
+
+// status helpers
+let isOpen = ref(false)
+let requestStatus = ref(true)
+let routeId = ref(null)
 
 let pacients = reactive([])
 let fakePacients = ref([])
-let search = ref(null);
+let pacientInfo = ref({})
+let search = ref(null)
 let page = 1;
-let requestStatus = ref(true);
 
 pacients = computed(() => PacientStore.pacientsList)
 watchEffect(() => {
   fakePacients.value = pacients.value;
 })
+routeId.value = route.params.id
 
 function getPacientList() {
   requestStatus.value = true;
@@ -63,7 +76,6 @@ function getPacientList() {
       console.log(error)
     })
 }
-getPacientList()
 
 function loadMorePacients() {
   page++;
@@ -75,6 +87,17 @@ function searchPacient() {
 
   fakePacients.value = PacientStore.search(search.value)
 }
+
+function handlePacientInfos(obj) {
+  pacientInfo.value = obj.pacient
+  isOpen.value = true
+}
+
+function closeModal() {
+  isOpen.value = false
+}
+
+getPacientList()
 
 const tableConfig = [
   {
@@ -94,10 +117,29 @@ const tableConfig = [
     title: 'Action',
   },
 ];
+
+watchEffect(() => {
+  routeId.value = route.params.id
+
+  if(routeId.value >= 0) {
+    pacientInfo.value = fakePacients.value[routeId.value]
+    if(pacientInfo.value) isOpen.value = true
+  }
+})
 </script>
 
 <style>
 main {
   height: calc(100vh - 72px);
+}
+
+.infos-enter-active,
+.infos-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.infos-enter-from,
+.infos-leave-to {
+  opacity: 0;
 }
 </style>
