@@ -1,19 +1,19 @@
 <template>
-  <div class="shadow-md shadow-slate-700 max-h-[50vh] overflow-y-auto relative side__infos">
-    <table class="w-full">
+  <div class="shadow-md shadow-slate-700 max-h-[45vh] lg:max-h-[50vh] overflow-y-auto relative side__infos">
+    <table class="table-fixed lg:table-auto w-full">
       <thead class="relative">
         <tr
           class="bg-slate-700 bg-opacity-90 sticky top-0 text-xs uppercase text-slate-200/70"
         >
-          <th @click="orderName" class="p-0 m-0">
+          <th @click="orderName" class="p-0 m-0 w-44">
             <button class="flex items-center justify-between w-full hover:bg-slate-600 py-1 px-5 text-xs uppercase font-bold">
               <span>Name</span>
               <SwitchVerticalIcon class="w-5 h-5" />
             </button>
           </th>
-          <th>Gender</th>
-          <th>Birth</th>
-          <th class="text-center">Action</th>
+          <th class="w-32">Gender</th>
+          <th class="w-32">Birth</th>
+          <th class="text-center w-32">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -22,7 +22,11 @@
           :key="index"
           class="hover:bg-slate-500 bg-slate-600 text-sm even:border-y even:border-slate-700/50 text-slate-300"
         >
-          <td>{{ `${patient.name.first} ${patient.name.last}` }}</td>
+          <td class="w-44">
+            <span class="truncate">
+              {{ `${patient.name.first} ${patient.name.last}` }}
+            </span>
+          </td>
           <td>{{ patient.gender }}</td>
           <td>{{ new Date(patient.dob.date).toLocaleDateString() }}</td>
           <td class="text-center py-2">
