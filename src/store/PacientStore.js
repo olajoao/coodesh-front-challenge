@@ -1,15 +1,35 @@
-import { defineStore } from "pinia";
-import request from "../http";
+import { defineStore } from 'pinia'
+import request from '../http'
 
-const usePacientStore = defineStore("usePacientStore", {
+const usePacientStore = defineStore('usePacientStore', {
   state: () => {
-    pacients: [];
+    return {
+      pacientsList: []
+    }
   },
   actions: {
-    async getPacients() {
-      return request.get("?page=10&results=101");
+    async getPacients (page) {
+      return request.get(`?page=${page}&results=50&seed=foobar`)
     },
-  },
-});
+    fillList (data) {
+      this.pacientsList.push(data)
+    },
+    search (search) {
+      let results = []
 
-export default usePacientStore;
+      let names = this.pacientsList.map(pacient => {
+        return `${pacient.name.first} ${pacient.name.last}`
+      })
+      
+      for (let index = 0; index < names.length; index++) {
+        if (names[index].toLowerCase().search(search.toLowerCase()) >= 0) {
+          results.push(this.pacientsList[index])
+        }
+      }
+      
+      return results
+    }
+  }
+})
+
+export default usePacientStore
