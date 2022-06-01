@@ -1,6 +1,6 @@
 # Coodesh Challenge - VueJS
 
-Integration with RandomAPI to build a pacient list page.
+Integration with RandomAPI to build a patient list page.
 
 ## Tools
 - VueJS

@@ -7,7 +7,7 @@ const routes = [
     component: Home
   },
   {
-    path: '/pacient/:id',
+    path: '/patient/:id',
     component: Home
   }
 ]

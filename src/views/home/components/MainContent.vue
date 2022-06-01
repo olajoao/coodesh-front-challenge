@@ -9,22 +9,22 @@
         <input
           type="text"
           class="font-medium bg-slate-700 outline-none focus:border-slate-500 font-sans px-3 border border-slate-600 py-2 w-full rounded-md text-slate-300 placeholder:text-slate-400/60"
-          placeholder="Search pacient name"
+          placeholder="Search patient name"
           v-model="search"
-          @input="searchPacient"
+          @input="searchPatient"
         />
         <DocumentSearchIcon
           class="absolute top-2.5 right-2 w-5 h-5 text-slate-400"
         />
       </div>
 
-      <PacientTable :pacientsData="fakePacientsList" @getPacient="handlePacientInfos" />
+      <PatientTable :patientsData="fakePatientsList" @getPatient="handlePatientInfos" />
 
       <Transition name="infos">
-        <PacientInfoModal v-if="isOpen" :pacientInfo="pacientInfo" :pacientId="indexID" :closeModal="closeModal" />
+        <PatientInfoModal v-if="isOpen" :patientInfo="patientInfo" :patientId="indexID" :closeModal="closeModal" />
       </Transition>
 
-      <LoadMoreButton :loading="requestStatus" @click="loadMorePacients" />
+      <LoadMoreButton :loading="requestStatus" @click="loadMorePatients" />
     </section>
   </main>
 </template>
@@ -33,44 +33,44 @@
 import { computed, reactive, ref, watch, watchEffect } from '@vue/runtime-core';
 import { useRoute } from 'vue-router';
 import { DocumentSearchIcon } from '@heroicons/vue/outline';
-import PacientTable from './Table.vue';
-import PacientInfoModal from './PacientInfoModal.vue';
-import usePacientStore from '../../../store/PacientStore.js';
+import PatientTable from './Table.vue';
+import PatientInfoModal from './PatientInfoModal.vue';
+import usePatientStore from '../../../store/PatientStore.js';
 import LoadMoreButton from './LoadMoreButton.vue';
 
-const PacientStore = usePacientStore();
+const PatientStore = usePatientStore();
 const route = useRoute();
 
 // status helpers
 let isOpen = ref(false)
 let requestStatus = ref(true)
 
-let pacients = reactive([])
-let fakePacientsList = ref([])
-let pacientInfo = ref({})
+let patients = reactive([])
+let fakePatientsList = ref([])
+let patientInfo = ref({})
 let indexID = ref(null)
 let search = ref(null)
 let page = 1
 let routeId = ref(null)
 
 
-pacients = computed(() => PacientStore.pacientsList)
+patients = computed(() => PatientStore.patientsList)
 watchEffect(() => {
-  fakePacientsList.value = pacients.value;
+  fakePatientsList.value = patients.value;
 })
 routeId.value = route.params.id
 
-function getPacientList() {
+function getPatientList() {
   requestStatus.value = true;
 
-  PacientStore.getPacients(page)
+  PatientStore.getPatients(page)
     .then(({ data }) => {
       requestStatus.value = false;
 
-      if(page === 1) PacientStore.pacientsList = [];
+      if(page === 1) PatientStore.patientsList = [];
 
-      let pacientList = data.results;
-      pacientList.forEach(pacient => PacientStore.fillList(pacient)) 
+      let patientList = data.results;
+      patientList.forEach(patient => PatientStore.fillList(patient)) 
     })
     .catch((error) => {
       requestStatus.value = false;
@@ -78,19 +78,19 @@ function getPacientList() {
     })
 }
 
-function loadMorePacients() {
+function loadMorePatients() {
   page++;
-  getPacientList();
+  getPatientList();
 }
 
-function searchPacient() {
-  if(!search.value || search.value === '') return getPacientList();
+function searchPatient() {
+  if(!search.value || search.value === '') return getPatientList();
 
-  fakePacientsList.value = PacientStore.search(search.value)
+  fakePatientsList.value = PatientStore.search(search.value)
 }
 
-function handlePacientInfos(obj) {
-  pacientInfo.value = obj.pacient
+function handlePatientInfos(obj) {
+  patientInfo.value = obj.patient
   indexID.value = obj.index
   isOpen.value = true
 }
@@ -99,12 +99,12 @@ function closeModal() {
   isOpen.value = false
 }
 
-getPacientList()
+getPatientList()
 
-watch(fakePacientsList, () => {
+watch(fakePatientsList, () => {
 
    if(route.params.id >= 0) {
-    pacientInfo.value = fakePacientsList.value[route.params.id]
+    patientInfo.value = fakePatientsList.value[route.params.id]
     isOpen.value = true
   }
 })

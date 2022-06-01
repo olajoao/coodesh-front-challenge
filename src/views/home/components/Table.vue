@@ -18,16 +18,16 @@
       </thead>
       <tbody>
         <tr
-          v-for="(pacient, index) in pacientsData"
+          v-for="(patient, index) in patientsData"
           :key="index"
           class="hover:bg-slate-500 bg-slate-600 text-sm even:border-y even:border-slate-700/50 text-slate-300"
         >
-          <td>{{ `${pacient.name.first} ${pacient.name.last}` }}</td>
-          <td>{{ pacient.gender }}</td>
-          <td>{{ new Date(pacient.dob.date).toLocaleDateString() }}</td>
+          <td>{{ `${patient.name.first} ${patient.name.last}` }}</td>
+          <td>{{ patient.gender }}</td>
+          <td>{{ new Date(patient.dob.date).toLocaleDateString() }}</td>
           <td class="text-center py-2">
             <button
-            @click="showPacientInfo(pacient, index)"
+            @click="showPatientInfo(patient, index)"
             class="px-5 bg-slate-800 text-slate-200 rounded-md shadow shadow-slate-600"
             >
               View
@@ -43,13 +43,13 @@
 <script setup>
 import { ref } from '@vue/reactivity';
 import { SwitchVerticalIcon } from '@heroicons/vue/solid';
-import usePacientStore from '../../../store/PacientStore';
+import usePatientStore from '../../../store/PatientStore';
 
-const PacientStore = usePacientStore();
-const emit = defineEmits(['getPacient'])
+const PatientStore = usePatientStore();
+const emit = defineEmits(['getPatient'])
 
 const props = defineProps({
-  pacientsData: {
+  patientsData: {
     type: Array,
     default: [],
   }
@@ -57,8 +57,8 @@ const props = defineProps({
 
 let order = ref(true);
 
-function showPacientInfo(pacient, index) {
-  emit('getPacient', {pacient, index})
+function showPatientInfo(patient, index) {
+  emit('getPatient', {patient, index})
 }
 
 function compare(a, b) {
@@ -76,7 +76,7 @@ function compare(a, b) {
 }
 
 function orderName() {
-  PacientStore.orderByName(compare)
+  PatientStore.orderByName(compare)
   order.value = !order.value
 }
 </script>
