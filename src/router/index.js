@@ -5,6 +5,10 @@ const routes = [
   {
     path: '/',
     component: Home
+  },
+  {
+    path: '/pacient/:id',
+    component: Home
   }
 ]
 

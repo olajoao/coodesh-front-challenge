@@ -1,6 +1,6 @@
 <template>
   <section @click.self="closeModal" class="fixed inset-0 bg-slate-900/50 flex justify-center items-center">
-    <div class="p-8 rounded-md relative bg-slate-50 shadow shadow-slate-400">
+    <div class="p-8 rounded-md relative bg-slate-300 shadow shadow-slate-400">
       <button @click="closeModal" class="absolute top-5 right-5">
         <XIcon class="w-5 h-5 text-slate-500 hover:text-slate-800"/>
       </button>
@@ -45,6 +45,12 @@
           <span class="text-xs uppercase font-bold text-slate-500">Address</span>  
           <p class="text-sm">{{ `${pacientInfo.location.street.name}, ${pacientInfo.location.street.number} - ${pacientInfo.location.city} ${pacientInfo.location.state}` }}</p>
         </div>
+        <div class="text-xs mt-5">
+          <span class="text-xs uppercase font-bold text-slate-500">Profile Link</span>  
+          <a target="_blank" class="flex text-sm gap-3 items-center" :href="`http://localhost:3000/pacient/${pacientId}`">
+            {{ `http://localhost:3000/pacient/${pacientId}` }}
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -52,6 +58,7 @@
 
 <script setup>
 import { XIcon } from '@heroicons/vue/outline';
+
 const props = defineProps({
   pacientInfo: {
     type: Object,
@@ -60,6 +67,12 @@ const props = defineProps({
   closeModal: {
     type: Function,
     default: Function
+  },
+  pacientId: {
+    type: Number,
+    default: -1
   }
 })
+
+console.log(props.pacientInfo[2])
 </script>
