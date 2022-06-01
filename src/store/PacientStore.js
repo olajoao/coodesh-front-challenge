@@ -28,6 +28,9 @@ const usePacientStore = defineStore('usePacientStore', {
       }
       
       return results
+    },
+    orderByName(compare) {
+      this.pacientsList.sort(compare)
     }
   }
 })
